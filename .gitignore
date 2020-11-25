@@ -1,0 +1,10 @@
+# backend folder
+/backend/.idea/
+/backend/var/
+/backend/vendor/
+
+# docker folder
+/docker/docker.env
+
+# frontend folder
+/frontend/node_modules/

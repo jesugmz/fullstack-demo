@@ -1,0 +1,5 @@
+# Negative lookahead. Using this pattern we ensure our builds will not add
+# undesired new files or folders. It is safer to explicitly add what we want
+# with its inconvenients.
+*
+!docker

@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+    webserver:
+      # We could use the built-in PHP webserver but one of the strongest benefits
+      # of using Docker is to reduce divergences between environments.
+      image: nginx:1.18
+      hostname: fullstackdemo-webserver
+      volumes:
+          - "./../backend:/var/www"
+          - "./webserver/config/serverblock.dev.conf:/etc/nginx/conf.d/default.conf"
+      ports:
+          - "${WEBSERVER_EXPOSED_PORT:-80}:80"
+    php:
+        image: jesugmz/fullstackdemo-php
+        hostname: fullstackdemo-php
+        environment:
+            # By injecting env variables instead of reading them from a .env file
+            # we can fine-grain control which service receive the specific variables
+            # and improve security by removing sensible file data -. For production,
+            # this must to reside in a secret storage.
+            - "PHP_XDEBUG_REMOTE_HOST=${PHP_XDEBUG_REMOTE_HOST}"
+            - "PHP_XDEBUG_REMOTE_PORT=${PHP_XDEBUG_REMOTE_PORT}"
+            - "PHP_XDEBUG_AUTOSTART=${PHP_XDEBUG_AUTOSTART}"
+            - "PHP_XDEBUG_PROFILER_ENABLED=${PHP_XDEBUG_PROFILER_ENABLED}"
+            - "PHP_IDE_CONFIG=serverName=fullstackdemo"
+            - "APP_ENV=${APP_ENV}"
+            - "APP_DEBUG=${APP_DEBUG}"
+            - "KERNEL_CLASS=${KERNEL_CLASS}"
+            - "DATABASE_HOST=${DATABASE_HOST}"
+        volumes:
+            - "./../backend:/var/www"
+            - "${XDEBUG_PROFILING_DIRECTORY}:/tmp/profiling"
+
+    database:
+        image: redis:6.0
+        hostname: fullstackdemo-cache
+        ports:
+            - "${DATABASE_EXPOSED_PORT:-6379}:6379"
+
+    node:
+        image: jesugmz/fullstackdemo-node
+        hostname: fullstackdemo-node
+        init: true # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#handling-kernel-signals
+        environment:
+            - "REACT_APP_JOKE_API_ENDPOINT=${JOKE_API_ENDPOINT}"
+        volumes:
+            - "./../frontend:/usr/local/frontend"
+        ports:
+            - "${NODE_EXPOSED_PORT:-3000}:3000"
