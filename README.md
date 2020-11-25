@@ -100,7 +100,7 @@ Some coding standards issues has been dropped to test this functionality.
 
 -   PHP strict types to coerce data type correctness - bye bye to duck typing - not inferring data type but manifesting it <https://en.wikipedia.org/wiki/Duck_typing>
 
--   Standardised development environment to avoid divergences between developers (in this case shown just as skill/benefit)
+-   Standardised development environment to avoid divergences between developers
 
 ## Notes
 

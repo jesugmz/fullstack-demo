@@ -141,11 +141,6 @@ function Search() {
             disabled={categorySearchDisabled}
             onChange={(e, d) => setCategory(d.value)}
           />
-          <Form.Field
-            control={Input}
-            placeholder={t('type_your_email_to_receive_the_results')}
-            width='three'
-          />
           <Form.Button
             control={Button}
             animated
